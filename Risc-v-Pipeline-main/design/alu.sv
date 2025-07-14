@@ -24,6 +24,9 @@ module alu#(
                 4'b0111: ALUResult = SrcA | SrcB;                           // OR
                 4'b1000: ALUResult = ($signed(SrcA) < $signed(SrcB)) ? 1 : 0; // SLT, SLTI
                 4'b1001: ALUResult = (SrcA == SrcB) ? 1 : 0;                // BEQ (comparação)
+		4'b1010: ALUResult = (SrcA == SrcB) ? 0 : 1;                // BNE (comparação)
+		4'b1011: ALUResult = (SrcA < SrcB) ? 1 : 0;                // BLT (comparação)
+		4'b1100: ALUResult = (SrcA >= SrcB) ? 1 : 0;                // BGE (comparação)
                 default: ALUResult = 32'd0;                                 // valor padrão
         endcase
         end

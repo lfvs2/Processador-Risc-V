@@ -48,7 +48,16 @@ module ALUController (
             {2'b00, 7'b???????, 3'b???}: Operation = 4'b0010; // ADD
 
             // Branch (ALUOp == 2'b01)
-            {2'b01, 7'b???????, 3'b???}: Operation = 4'b1001; // BEQ (comparação)
+            {2'b01, 7'b???????, 3'b000}: Operation = 4'b1001; // BEQ (comparação)
+
+	    // Branch (ALUOp == 2'b01)
+            {2'b01, 7'b???????, 3'b001}: Operation = 4'b1010; // BNE (comparação)
+
+            // Branch (ALUOp == 2'b01)
+            {2'b01, 7'b???????, 3'b100}: Operation = 4'b1011; // BLT (comparação)
+
+	    // Branch (ALUOp == 2'b01)
+            {2'b01, 7'b???????, 3'b101}: Operation = 4'b1100; // BGE (comparação)
             
             // JAL / LUI (ALUOp == 2'b11)
             {2'b11, 7'b???????, 3'b???}: Operation = 4'b0010; // ADD (para JAL e outras operações que possam usar a ALU)
