@@ -176,26 +176,13 @@ def end_file(file_name):
 
 
 # converts a decimal value to a signed binary value (sign bit is the first bit)
-def sbin(value):
-	binary = bin(int(value))
+def sbin(value, bits=32):
+	value = int(value)
 
-	if (binary[0] == '-'):
-		return '1' + binary[3:]
-
-	else:
-		return '0' + binary[2:]
-
-
-# pads a binary value with 0s or 1s to a certain length (same as zfill() but extends the sign bit)
-def sfill(value, length):
-	if (len(value) < length):
-		if (value[0] == '1'):
-			return (length - len(value)) * '1' + value
-		else:
-			return (length - len(value)) * '0' + value
-	else:
-		return value
-
+	if value >= 0:
+		return format(value, f'0{bits}b')
+	else:	
+		return format((1 << bits) + value, f'0{bits}b') # two's complement 
 
 # tries to translate an instruction to binary (assembly to machine code)
 def translate(instruction):
