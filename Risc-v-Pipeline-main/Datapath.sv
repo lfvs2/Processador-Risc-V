@@ -34,7 +34,6 @@ module Datapath #(
     output logic reg_write_sig,  //sinal de escrita no registrador
 
     output logic wr,  // write enable
-    output logic reade,  // read enable
     output logic [DM_ADDRESS-1:0] addr,  // address
     output logic [DATA_W-1:0] wr_data,  // write data
     output logic [DATA_W-1:0] rd_data  // read data
