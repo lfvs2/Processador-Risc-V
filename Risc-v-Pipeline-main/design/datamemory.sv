@@ -63,7 +63,7 @@ module datamemory #(
      	case (a[1:0])
       	2'b00: begin Datain <= {24'b0, wd[7:0]}; Wr <= 4'b0001; end 
       	2'b01: begin Datain <= {16'b0, wd[7:0], 8'b0}; Wr <= 4'b0010; end 
-      	2'b10: begin Datain <= {8'b0, wd[7:0], 16'b0}; Wr <= 4'b0100; 
+      	2'b10: begin Datain <= {8'b0, wd[7:0], 16'b0}; Wr <= 4'b0100; end
      	2'b11: begin Datain <= {wd[7:0], 24'b0}; Wr <= 4'b1000; end 
       	default: Wr <= 4'b0000; 
      	endcase
