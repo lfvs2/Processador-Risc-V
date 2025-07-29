@@ -23,9 +23,9 @@ module Controller (
 
   assign R_TYPE = 7'b0110011;  //Tipo r: add,and, sub, or...
   assign I_TYPE = 7'b0010011; // Tipo i: addi, slti, slli...
-  assign LW = 7'b0000011;  //lw
-  assign SW = 7'b0100011;  //sw
-  assign BR = 7'b1100011;  //beq
+  assign LW = 7'b0000011;  // lw, lh, lb, lbu.
+  assign SW = 7'b0100011;  // sw, sh,  bh.
+  assign BR = 7'b1100011;  // beq
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
   assign MemtoReg = (Opcode == LW);
