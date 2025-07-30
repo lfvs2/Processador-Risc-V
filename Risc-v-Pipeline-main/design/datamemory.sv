@@ -66,8 +66,8 @@ module datamemory #(
                	2'b11: rd = {{24{Dataout[31]}}, Dataout[31:24]}; // Load byte 3 (bits 31:24 of Dataout)
                	default: rd = 32'b0; 
             endcase
-      endcase
-    end else if (MemWrite) begin
+        end
+    else if (MemWrite) begin
       case (Funct3)
           3'b000: begin // SB (Store Byte)
          	case (a[1:0])
