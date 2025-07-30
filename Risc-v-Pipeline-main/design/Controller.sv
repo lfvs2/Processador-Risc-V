@@ -17,7 +17,7 @@ module Controller (
     output logic MemWrite, //Data memory contents designated by the address input are replaced by the value on the Write data input.
     output logic [1:0] ALUOp,  //00: LW/SW; 01:Branch; 10: Rtype; 11: I_TYPE
     output logic Branch,  //0: branch is not taken; 1: branch is taken
-	output logic Halt
+    output logic Halt
 );
 
   logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, HLT;
@@ -37,5 +37,5 @@ module Controller (
   assign ALUOp[0] = (Opcode == BR || Opcode == I_TYPE);
   assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE);
   assign Branch = (Opcode == BR);
-  assign Halt = (Pcode == HLT)
+  assign Halt = (Opcode == HLT)
 endmodule
