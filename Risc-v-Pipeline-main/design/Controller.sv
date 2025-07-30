@@ -32,7 +32,7 @@ module Controller (
   assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE);
   assign MemRead = (Opcode == LW);
   assign MemWrite = (Opcode == SW);
-  assign ALUOp[0] = (Opcode == BR || Opcode == I_TYPE);
+  assign ALUOp[0] = (Opcode == BR);
   assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE);
   assign Branch = (Opcode == BR);
 endmodule
