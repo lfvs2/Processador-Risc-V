@@ -56,7 +56,7 @@ module datamemory #(
         3'b010:	begin  //LW
                 rd = Dataout;
         	end
-        default: rd <= Dataout;
+        default: rd = Dataout;
 
         3'b100: begin // LBU
             case (a[1:0])
@@ -71,27 +71,23 @@ module datamemory #(
       case (Funct3)
           3'b000: begin // SB (Store Byte)
          	case (a[1:0])
-          	    2'b00: begin Datain = {24'b0, wd[7:0]}; Wr = 4'b0001; end 
-          	    2'b01: begin Datain = {16'b0, wd[7:0], 8'b0}; Wr = 4'b0010; end 
-          	    2'b10: begin Datain = {8'b0, wd[7:0], 16'b0}; Wr = 4'b0100; end
-         	    2'b11: begin Datain = {wd[7:0], 24'b0}; Wr = 4'b1000; end 
+          	    2'b00: begin Datain = {Dataout[31:8], wd[7:0]}; Wr = 4'b0001; end 
+          	    2'b01: begin Datain = {Dataout[31:16], wd[7:0], Dataout[7:0]}; Wr = 4'b0010; end 
+          	    2'b10: begin Datain = {Dataout[31:24], wd[7:0], Dataout[15:0]}; Wr = 4'b0100; end
+         	    2'b11: begin Datain = {wd[7:0], Dataout[23:0]}; Wr = 4'b1000; end 
           	    default: Wr = 4'b0000; 
             endcase
           end
        3'b001: begin // SH (Store Half-word)
          case (a[1])
-         1'b0: begin Datain = {16'b0, wd[15:0]}; Wr = 4'b0011; end 
-         1'b1: begin Datain = {wd[15:0], 16'b0}; Wr = 4'b1100; end 
-         default: Wr = 4'b0000;
+             1'b0: begin Datain = {Dataout[31:16], wd[15:0]}; Wr = 4'b0011; end 
+             1'b1: begin Datain = {wd[15:0], Dataout[15:0]}; Wr = 4'b1100; end 
+             default: Wr = 4'b0000;
          endcase
         end
         3'b010: begin // SW (Store Word)
-          Wr = 4'b1111; 
-          Datain = wd;  
-          end
-          default: begin
-          Wr = 4'b0000;
-          Datain = 32'b0; 
+              Wr = 4'b1111; 
+              Datain = wd;  
           end
          endcase
         end
