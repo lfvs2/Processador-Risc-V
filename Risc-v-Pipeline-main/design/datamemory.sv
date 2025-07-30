@@ -6,7 +6,7 @@ module datamemory #(
 ) (
     input logic clk,
     input logic MemRead,  // comes from control unit
-    input logic MemWrite,  // comes from control unit
+    input logic MemWrite,  // Comes from control unit
     input logic [DM_ADDRESS - 1:0] a,  // Read / Write address - 9 LSB bits of the ALU output
     input logic [DATA_W - 1:0] wd,  // Write Data
     input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
@@ -28,37 +28,70 @@ module datamemory #(
       .Wr(Wr)
   );
 
-  always_ff @(*) begin
-    raddress = {{22{1'b0}}, a};
-    waddress = {{22{1'b0}}, a}; // byte-adressed
+  always_comb begin
+    raddress = {{22{1'b0}}, a[8:2], 2'b00};
+    waddress = {{22{1'b0}}, a[8:2], 2'b00};
     Datain = wd;
     Wr = 4'b0000;
+    
 
-    if (MemRead) begin // reading data functions
+    if (MemRead) begin
       case (Funct3)
-        3'b000:	 // LB
-            rd = {{24{Dataout[7]}}, Dataout[7:0]}; // function reads the byte with sign extension
-        3'b001:  // LH
-            rd = {{16{Dataout[15]}}, Dataout[15:0]} // reads half-word (16 bits) with sign extension
-        3'b010:  // LW
-            rd = Dataout; // reads the entire word
-        3'b100:  // LBU
-            rd = {24'b0, Dataout[7:0]}; // reads byte unsigned
-        default: rd = Dataout; // in case of funct3 values unrecognizeds, returns the full word 
+        3'b000:	begin  //LB
+            case (a[1:0])
+               	2'b00: rd = {{24{Dataout[7]}}, Dataout[7:0]};   // Load byte 0 (bits 7:0 of Dataout)
+               	2'b01: rd = {{24{Dataout[15]}}, Dataout[15:8]}; // Load byte 1 (bits 15:8 of Dataout)
+               	2'b10: rd = {{24{Dataout[23]}}, Dataout[23:16]}; // Load byte 2 (bits 23:16 of Dataout)
+               	2'b11: rd = {{24{Dataout[31]}}, Dataout[31:24]}; // Load byte 3 (bits 31:24 of Dataout)
+               	default: rd = 32'b0; 
+            endcase
+    	end
+        3'b001:	begin  //LH
+        	 case (a[1])
+                1'b0: rd = {{16{Dataout[15]}}, Dataout[15:0]}; // Load half-word 0 (bits 15:0 of Dataout)
+                1'b1: rd = {{16{Dataout[31]}}, Dataout[31:16]}; // Load half-word 1 (bits 31:16 of Dataout)
+                default: rd = 32'b0; 
+            endcase
+        end
+        3'b010:	begin  //LW
+                rd = Dataout;
+        	end
+        default: rd <= Dataout;
+
+        3'b100: begin // LBU
+            case (a[1:0])
+               	2'b00: rd = {{24{Dataout[7]}}, Dataout[7:0]};   // Load byte 0 (bits 7:0 of Dataout)
+               	2'b01: rd = {{24{Dataout[15]}}, Dataout[15:8]}; // Load byte 1 (bits 15:8 of Dataout)
+               	2'b10: rd = {{24{Dataout[23]}}, Dataout[23:16]}; // Load byte 2 (bits 23:16 of Dataout)
+               	2'b11: rd = {{24{Dataout[31]}}, Dataout[31:24]}; // Load byte 3 (bits 31:24 of Dataout)
+               	default: rd = 32'b0; 
+            endcase
       endcase
     end else if (MemWrite) begin
       case (Funct3)
-        3'b000: // SB (Store Byte)
-            Wr = 4'b0001; // write byte
-        3'b001: // SH (Store Half-word)
-            Wr = 4'b0011; // write half-word
+          3'b000: begin // SB (Store Byte)
+         	case (a[1:0])
+          	    2'b00: begin Datain = {24'b0, wd[7:0]}; Wr = 4'b0001; end 
+          	    2'b01: begin Datain = {16'b0, wd[7:0], 8'b0}; Wr = 4'b0010; end 
+          	    2'b10: begin Datain = {8'b0, wd[7:0], 16'b0}; Wr = 4'b0100; end
+         	    2'b11: begin Datain = {wd[7:0], 24'b0}; Wr = 4'b1000; end 
+          	    default: Wr = 4'b0000; 
+            endcase
+          end
+       3'b001: begin // SH (Store Half-word)
+         case (a[1])
+         1'b0: begin Datain = {16'b0, wd[15:0]}; Wr = 4'b0011; end 
+         1'b1: begin Datain = {wd[15:0], 16'b0}; Wr = 4'b1100; end 
+         default: Wr = 4'b0000;
+         endcase
+        end
         3'b010: begin // SW (Store Word)
-          Wr <= 4'b1111; 
-          Datain <= wd;  
+          Wr = 4'b1111; 
+          Datain = wd;  
           end
           default: begin
-          Wr <= 4'b1111;
-          Datain <= wd; 
+          Wr = 4'b0000;
+          Datain = 32'b0; 
           end
          endcase
         end
