@@ -17,25 +17,27 @@ module Controller (
     output logic MemWrite, //Data memory contents designated by the address input are replaced by the value on the Write data input.
     output logic [1:0] ALUOp,  //00: LW/SW; 01:Branch; 10: Rtype; 11: I_TYPE
     output logic Branch,  //0: branch is not taken; 1: branch is taken
-    output logic Halt
+    output logic HaltSignal
 );
 
-  logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, HLT;
+  logic [6:0] R_TYPE, I_TYPE, LW, SW, BR;
 
   assign R_TYPE = 7'b0110011;  //Tipo r: add,and, sub, or...
   assign I_TYPE = 7'b0010011; // Tipo i: addi, slti, slli...
-  assign LW = 7'b0000011;  //lw
+  assign LW = 7'b0000011;  //lws
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
-  assign HLT = 7'b1111111; //halt
+  //testar o assign od halt
 
-  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
-  assign MemtoReg = (Opcode == LW);
-  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE);
-  assign MemRead = (Opcode == LW);
-  assign MemWrite = (Opcode == SW);
-  assign ALUOp[0] = (Opcode == BR || Opcode == I_TYPE);
-  assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE);
-  assign Branch = (Opcode == BR);
-    assign Halt = (Opcode == HLT);
+  assign HaltSignal = (Opcode == 7'b1111111);
+
+
+  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE) && !HaltSignal;
+  assign MemtoReg = (Opcode == LW) && !HaltSignal;
+  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE) && !HaltSignal;
+  assign MemRead = (Opcode == LW) && !HaltSignal;
+  assign MemWrite = (Opcode == SW) && !HaltSignal;
+  assign ALUOp[0] = (Opcode == BR || Opcode == I_TYPE) && !HaltSignal;
+  assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE) && !HaltSignal;
+  assign Branch = (Opcode == BR) && !HaltSignal;
 endmodule

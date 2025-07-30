@@ -15,7 +15,8 @@ module riscv #(
     output logic rd,
     output logic [8:0] addr,
     output logic [DATA_W-1:0] wr_data,
-    output logic [DATA_W-1:0] rd_data
+    output logic [DATA_W-1:0] rd_data,
+    output logic HaltedState
 );
 
   logic [6:0] opcode;
@@ -25,6 +26,7 @@ module riscv #(
   logic [6:0] Funct7;
   logic [2:0] Funct3;
   logic [3:0] Operation;
+  logic HaltSignal;
 
   Controller c (
       opcode,
@@ -35,7 +37,8 @@ module riscv #(
       MemWrite,
       ALUop,
       Branch,
-	Halt
+      HaltSignal,
+
   );
 
   ALUController ac (
@@ -54,7 +57,6 @@ module riscv #(
       MemWrite,
       MemRead,
       Branch,
-      Halt,
       ALUop,
       Operation,
       opcode,
@@ -69,7 +71,9 @@ module riscv #(
       rd,
       addr,
       wr_data,
-      rd_data
+      rd_data,
+      HaltSignal,
+      HaltedState,
   );
 
 endmodule

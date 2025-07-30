@@ -8,19 +8,24 @@ module Datapath #(
     parameter RF_ADDRESS = 5,  // Register File Address
     parameter DATA_W = 32,  // Data WriteData
     parameter DM_ADDRESS = 9,  // Data Memory Address
-    parameter ALU_CC_W = 4  // ALU Control Code Width
+    parameter ALU_CC_W = 4,  // ALU Control Code Width
+    parameter HALT = 7'b1111111
 ) (
     input  logic                 clk,
     reset,
     RegWrite,
     MemtoReg,  // Register file writing enable   // Memory or ALU MUX
-    ALUsrc,
+    ALUSrc,
     MemWrite,  // Register file or Immediate MUX // Memroy Writing Enable
     MemRead,  // Memroy Reading Enable
     Branch,  // Branch Enable
-    Halt,
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
+
+    input logic HaltSignal,
+
+    output logic HaltedState,
+
     output logic [          6:0] opcode,
     output logic [          6:0] Funct7,
     output logic [          2:0] Funct3,
@@ -58,6 +63,43 @@ module Datapath #(
   ex_mem_reg C;
   mem_wb_reg D;
 
+  logic halted;
+  assign HaltedState = halted;
+
+  always @(posedge clk) begin
+    if (reset) begin
+        PC <= 0;
+    end
+    else if (!halted) begin
+        PC <= Next_PC;
+    end
+  end
+
+  always @(posedge clk) begin 
+    if (reset || PcSel) begin 
+        A <= '0;
+    end 
+    else if (!halted && !Reg_Stall)begin 
+        A.Curr_Pc <= PC;
+        A.Curr_Instr <= Instr;
+    end
+
+  end
+
+  always_ff @(posedge clk or posedge reset) begin
+    if (reset) begin
+      halted <= 1'b0;  // Reset assíncrono sai do estado HALT
+      // Reset de outros registradores...
+      PC <= 0;
+      A <= '{default:0};
+      B <= '{default:0};
+      C <= '{default:0};
+      D <= '{default:0};
+    end else if (HaltSignal) begin
+      halted <= 1'b1;  // Entra em estado HALT
+    end
+  end
+
   // next PC
   adder #(9) pcadd (
       PC,
@@ -85,15 +127,21 @@ module Datapath #(
 
   // IF_ID_Reg A;
   always @(posedge clk) begin
-    if ((reset) || (PcSel) || Halt)   // initialization or flush
+    if ((reset) || (PcSel) || (opcode == HALT))   // initialization or flush
         begin
       A.Curr_Pc <= 0;
       A.Curr_Instr <= 0;
     end
-        else if (!Reg_Stall)    // stall
-        begin
+
+    else if (opcode == HALT)begin 
       A.Curr_Pc <= PC;
-      A.Curr_Instr <= Instr;
+      A.Curr_Instr <= 32'h00000013;
+    end
+
+    else if (!Reg_Stall && !halted)    // stall
+    begin
+        A.Curr_Pc <= PC;
+        A.Curr_Instr <= Instr;
     end
   end
 
@@ -131,10 +179,9 @@ module Datapath #(
       ExtImm
   );
 
-  // ID_EX_Reg B;
-  always @(posedge clk) begin
-    if ((reset) || (Reg_Stall) || (PcSel))   // initialization or flush or generate a NOP if hazard
-        begin
+  always_ff @(posedge clk or posedge reset) begin
+    if (reset) begin
+      // Reset completo (assíncrono)
       B.ALUSrc <= 0;
       B.MemtoReg <= 0;
       B.RegWrite <= 0;
@@ -142,7 +189,6 @@ module Datapath #(
       B.MemWrite <= 0;
       B.ALUOp <= 0;
       B.Branch <= 0;
-      B.Halt <= 0;
       B.Curr_Pc <= 0;
       B.RD_One <= 0;
       B.RD_Two <= 0;
@@ -152,26 +198,70 @@ module Datapath #(
       B.ImmG <= 0;
       B.func3 <= 0;
       B.func7 <= 0;
-      B.Curr_Instr <= A.Curr_Instr;  //debug tmp
-    end else begin
-      B.ALUSrc <= ALUsrc;
-      B.MemtoReg <= MemtoReg;
-      B.RegWrite <= RegWrite;
-      B.MemRead <= MemRead;
-      B.MemWrite <= MemWrite;
-      B.ALUOp <= ALUOp;
-      B.Branch <= Branch;
-      B.Halt <= Halt;
-      B.Curr_Pc <= A.Curr_Pc;
-      B.RD_One <= Reg1;
-      B.RD_Two <= Reg2;
-      B.RS_One <= A.Curr_Instr[19:15];
-      B.RS_Two <= A.Curr_Instr[24:20];
-      B.rd <= A.Curr_Instr[11:7];
-      B.ImmG <= ExtImm;
-      B.func3 <= A.Curr_Instr[14:12];
-      B.func7 <= A.Curr_Instr[31:25];
-      B.Curr_Instr <= A.Curr_Instr;  //debug tmp
+      B.Curr_Instr <= 0;
+    end
+    else begin
+        if (Reg_Stall || PcSel) begin
+          // Stall por hazard ou branch taken - injeta NOP
+          B.ALUSrc <= 0;
+          B.MemtoReg <= 0;
+          B.RegWrite <= 0;
+          B.MemRead <= 0;
+          B.MemWrite <= 0;
+          B.ALUOp <= 0;
+          B.Branch <= 0;
+          // Mantém os valores dos registradores para evitar corrupção
+          B.Curr_Pc <= B.Curr_Pc;
+          B.RD_One <= B.RD_One;
+          B.RD_Two <= B.RD_Two;
+          B.RS_One <= B.RS_One;
+          B.RS_Two <= B.RS_Two;
+          B.rd <= B.rd;
+          B.ImmG <= B.ImmG;
+          B.func3 <= B.func3;
+          B.func7 <= B.func7;
+          B.Curr_Instr <= 32'h00000013; // NOP explícito
+        end
+        else if (halted) begin
+          // Congelamento durante HALT - mantém tudo inalterado
+          B.ALUSrc <= B.ALUSrc;
+          B.MemtoReg <= B.MemtoReg;
+          B.RegWrite <= B.RegWrite;
+          B.MemRead <= B.MemRead;
+          B.MemWrite <= B.MemWrite;
+          B.ALUOp <= B.ALUOp;
+          B.Branch <= B.Branch;
+          B.Curr_Pc <= B.Curr_Pc;
+          B.RD_One <= B.RD_One;
+          B.RD_Two <= B.RD_Two;
+          B.RS_One <= B.RS_One;
+          B.RS_Two <= B.RS_Two;
+          B.rd <= B.rd;
+          B.ImmG <= B.ImmG;
+          B.func3 <= B.func3;
+          B.func7 <= B.func7;
+          B.Curr_Instr <= B.Curr_Instr;
+        end
+        else begin
+          // Operação normal
+          B.ALUSrc <= ALUSrc;
+          B.MemtoReg <= MemtoReg;
+          B.RegWrite <= RegWrite;
+          B.MemRead <= MemRead;
+          B.MemWrite <= MemWrite;
+          B.ALUOp <= ALUOp;
+          B.Branch <= Branch;
+          B.Curr_Pc <= A.Curr_Pc;
+          B.RD_One <= Reg1;
+          B.RD_Two <= Reg2;
+          B.RS_One <= A.Curr_Instr[19:15];
+          B.RS_Two <= A.Curr_Instr[24:20];
+          B.rd <= A.Curr_Instr[11:7];
+          B.ImmG <= ExtImm;
+          B.func3 <= A.Curr_Instr[14:12];
+          B.func7 <= A.Curr_Instr[31:25];
+          B.Curr_Instr <= A.Curr_Instr;
+        end
     end
   end
 
@@ -233,7 +323,7 @@ module Datapath #(
 
   // EX_MEM_Reg C;
   always @(posedge clk) begin
-    if (reset)   // initialization
+    if (reset || (opcode == HALT))   // initialization
         begin
       C.RegWrite <= 0;
       C.MemtoReg <= 0;
@@ -242,21 +332,19 @@ module Datapath #(
       C.Pc_Imm <= 0;
       C.Pc_Four <= 0;
       C.Imm_Out <= 0;
-      C.Halt <= 0;
       C.Alu_Result <= 0;
       C.RD_Two <= 0;
       C.rd <= 0;
       C.func3 <= 0;
       C.func7 <= 0;
     end else begin
-      C.RegWrite <= B.RegWrite;
+      C.RegWrite <= B.RegWrite && !HaltSignal;
       C.MemtoReg <= B.MemtoReg;
-      C.MemRead <= B.MemRead;
-      C.MemWrite <= B.MemWrite;
+      C.MemRead <= B.MemRead && !HaltSignal;
+      C.MemWrite <= B.MemWrite && !HaltSignal;
       C.Pc_Imm <= BrImm;
       C.Pc_Four <= Old_PC_Four;
       C.Imm_Out <= B.ImmG;
-      C.Halt <= Halt;
       C.Alu_Result <= ALUResult;
       C.RD_Two <= FBmux_Result;
       C.rd <= B.rd;
@@ -269,30 +357,29 @@ module Datapath #(
   // // // // Data memory 
   datamemory data_mem (
       clk,
-      C.MemRead,
-      C.MemWrite,
+      C.MemRead && !halted,
+      C.MemWrite && !halted,
       C.Alu_Result[8:0],
       C.RD_Two,
       C.func3,
       ReadData
   );
 
-  assign wr = C.MemWrite;
-  assign reade = C.MemRead;
+  assign wr = C.MemWrite && !halted;
+  assign reade = C.MemRead && !halted;
   assign addr = C.Alu_Result[8:0];
   assign wr_data = C.RD_Two;
   assign rd_data = ReadData;
 
   // MEM_WB_Reg D;
   always @(posedge clk) begin
-    if (reset)   // initialization
+    if (reset || (opcode == HALT))   // initialization
         begin
       D.RegWrite <= 0;
       D.MemtoReg <= 0;
       D.Pc_Imm <= 0;
       D.Pc_Four <= 0;
       D.Imm_Out <= 0;
-      D.Halt <= 0;
       D.Alu_Result <= 0;
       D.MemReadData <= 0;
       D.rd <= 0;
@@ -302,7 +389,6 @@ module Datapath #(
       D.Pc_Imm <= C.Pc_Imm;
       D.Pc_Four <= C.Pc_Four;
       D.Imm_Out <= C.Imm_Out;
-      D.Halt <= Halt;
       D.Alu_Result <= C.Alu_Result;
       D.MemReadData <= ReadData;
       D.rd <= C.rd;
@@ -319,5 +405,8 @@ module Datapath #(
   );
 
   assign WB_Data = WrmuxSrc;
+  assign reg_num = D.rd;
+  assign reg_data = WrmuxSrc;
+  assign reg_write_sig = D.RegWrite && !halted;
 
 endmodule

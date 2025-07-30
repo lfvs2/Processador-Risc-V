@@ -1,0 +1,174 @@
+D:/Users/lfvs2/Documents/processor/Datapath.sv {0 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/Datapath.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling package Datapath_sv_unit
+-- Importing package Pipe_Buf_Reg_PKG
+-- Compiling module Datapath
+** Error (suppressible): (vlog-13276) D:/Users/lfvs2/Documents/processor/Datapath.sv(185): Could not find field/method name (ALUsrc) in 'B' of 'B.ALUsrc'.
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(93): (vlog-7061) Variable 'PC' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(71).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(94): (vlog-7061) Variable 'A' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(80).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(328): (vlog-7061) Variable 'C.RegWrite' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(329): (vlog-7061) Variable 'C.MemtoReg' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(330): (vlog-7061) Variable 'C.MemRead' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(331): (vlog-7061) Variable 'C.MemWrite' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(332): (vlog-7061) Variable 'C.Pc_Imm' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(333): (vlog-7061) Variable 'C.Pc_Four' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(334): (vlog-7061) Variable 'C.Imm_Out' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(335): (vlog-7061) Variable 'C.Alu_Result' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(336): (vlog-7061) Variable 'C.RD_Two' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(337): (vlog-7061) Variable 'C.rd' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(338): (vlog-7061) Variable 'C.func3' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(339): (vlog-7061) Variable 'C.func7' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(341): (vlog-7061) Variable 'C.RegWrite' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(342): (vlog-7061) Variable 'C.MemtoReg' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(343): (vlog-7061) Variable 'C.MemRead' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(344): (vlog-7061) Variable 'C.MemWrite' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(345): (vlog-7061) Variable 'C.Pc_Imm' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(346): (vlog-7061) Variable 'C.Pc_Four' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(347): (vlog-7061) Variable 'C.Imm_Out' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(348): (vlog-7061) Variable 'C.Alu_Result' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(349): (vlog-7061) Variable 'C.RD_Two' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(350): (vlog-7061) Variable 'C.rd' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(351): (vlog-7061) Variable 'C.func3' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(352): (vlog-7061) Variable 'C.func7' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(353): (vlog-7061) Variable 'C.Curr_Instr' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(96).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(378): (vlog-7061) Variable 'D.RegWrite' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(379): (vlog-7061) Variable 'D.MemtoReg' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(380): (vlog-7061) Variable 'D.Pc_Imm' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(381): (vlog-7061) Variable 'D.Pc_Four' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(382): (vlog-7061) Variable 'D.Imm_Out' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(383): (vlog-7061) Variable 'D.Alu_Result' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(384): (vlog-7061) Variable 'D.MemReadData' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(385): (vlog-7061) Variable 'D.rd' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(387): (vlog-7061) Variable 'D.RegWrite' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(388): (vlog-7061) Variable 'D.MemtoReg' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(389): (vlog-7061) Variable 'D.Pc_Imm' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(390): (vlog-7061) Variable 'D.Pc_Four' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(391): (vlog-7061) Variable 'D.Imm_Out' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(392): (vlog-7061) Variable 'D.Alu_Result' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(393): (vlog-7061) Variable 'D.MemReadData' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(394): (vlog-7061) Variable 'D.rd' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(395): (vlog-7061) Variable 'D.Curr_Instr' driven in an always_ff block, may not be driven by any other process. See D:/Users/lfvs2/Documents/processor/Datapath.sv(97).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(408): (vlog-7045) 'reg_num' is driven by more than one continuous assignment. See D:/Users/lfvs2/Documents/processor/Datapath.sv(172).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(409): (vlog-7045) 'reg_data' is driven by more than one continuous assignment. See D:/Users/lfvs2/Documents/processor/Datapath.sv(173).
+** Error (suppressible): D:/Users/lfvs2/Documents/processor/Datapath.sv(410): (vlog-7045) 'reg_write_sig' is driven by more than one continuous assignment. See D:/Users/lfvs2/Documents/processor/Datapath.sv(174).
+
+} {} {}} D:/Users/lfvs2/Documents/processor/ramOnChipData.v {1 {vlog -work work -stats=none D:/Users/lfvs2/Documents/processor/ramOnChipData.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module ramOnChipData
+
+Top level modules:
+	ramOnChipData
+
+} {} {}} D:/Users/lfvs2/Documents/processor/Memoria32Data.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/Memoria32Data.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Memoria32Data
+
+Top level modules:
+	Memoria32Data
+
+} {} {}} D:/Users/lfvs2/Documents/processor/alu.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/alu.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module alu
+
+Top level modules:
+	alu
+
+} {} {}} D:/Users/lfvs2/Documents/processor/ramOnChip32.v {1 {vlog -work work -stats=none D:/Users/lfvs2/Documents/processor/ramOnChip32.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module ramOnChip32
+
+Top level modules:
+	ramOnChip32
+
+} {} {}} D:/Users/lfvs2/Documents/processor/ForwardingUnit.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/ForwardingUnit.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module ForwardingUnit
+
+Top level modules:
+	ForwardingUnit
+
+} {} {}} D:/Users/lfvs2/Documents/processor/instructionmemory.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/instructionmemory.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module instructionmemory
+
+Top level modules:
+	instructionmemory
+
+} {} {}} D:/Users/lfvs2/Documents/processor/mux2.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/mux2.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module mux2
+
+Top level modules:
+	mux2
+
+} {} {}} D:/Users/lfvs2/Documents/processor/imm_Gen.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/imm_Gen.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module imm_Gen
+
+Top level modules:
+	imm_Gen
+
+} {} {}} D:/Users/lfvs2/Documents/processor/RegFile.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/RegFile.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module RegFile
+
+Top level modules:
+	RegFile
+
+} {} {}} D:/Users/lfvs2/Documents/processor/mux4.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/mux4.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module mux4
+
+Top level modules:
+	mux4
+
+} {} {}} D:/Users/lfvs2/Documents/processor/Memoria32.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/Memoria32.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Memoria32
+
+Top level modules:
+	Memoria32
+
+} {} {}} D:/Users/lfvs2/Documents/processor/tb_top.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/tb_top.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_top
+
+Top level modules:
+	tb_top
+
+} {} {}} D:/Users/lfvs2/Documents/processor/adder.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/adder.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module adder
+
+Top level modules:
+	adder
+
+} {} {}} D:/Users/lfvs2/Documents/processor/HazardDetection.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/HazardDetection.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module HazardDetection
+
+Top level modules:
+	HazardDetection
+
+} {} {}} D:/Users/lfvs2/Documents/processor/datamemory.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/datamemory.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module datamemory
+
+Top level modules:
+	datamemory
+
+} {} {}} D:/Users/lfvs2/Documents/processor/flopr.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/flopr.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module flopr
+
+Top level modules:
+	flopr
+
+} {} {}} D:/Users/lfvs2/Documents/processor/BranchUnit.sv {1 {vlog -work work -sv -stats=none D:/Users/lfvs2/Documents/processor/BranchUnit.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module BranchUnit
+
+Top level modules:
+	BranchUnit
+
+} {} {}}
