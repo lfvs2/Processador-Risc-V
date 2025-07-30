@@ -34,7 +34,8 @@ module riscv #(
       MemRead,
       MemWrite,
       ALUop,
-      Branch
+      Branch,
+	Halt
   );
 
   ALUController ac (
@@ -53,6 +54,7 @@ module riscv #(
       MemWrite,
       MemRead,
       Branch,
+      Halt,
       ALUop,
       Operation,
       opcode,
