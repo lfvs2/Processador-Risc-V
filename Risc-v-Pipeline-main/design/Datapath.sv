@@ -18,6 +18,7 @@ module Datapath #(
     MemWrite,  // Register file or Immediate MUX // Memroy Writing Enable
     MemRead,  // Memroy Reading Enable
     Branch,  // Branch Enable
+    Halt,
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
     output logic [          6:0] opcode,
@@ -84,7 +85,7 @@ module Datapath #(
 
   // IF_ID_Reg A;
   always @(posedge clk) begin
-    if ((reset) || (PcSel))   // initialization or flush
+    if ((reset) || (PcSel) || Halt)   // initialization or flush
         begin
       A.Curr_Pc <= 0;
       A.Curr_Instr <= 0;
@@ -141,6 +142,7 @@ module Datapath #(
       B.MemWrite <= 0;
       B.ALUOp <= 0;
       B.Branch <= 0;
+      B.Halt <= 0;
       B.Curr_Pc <= 0;
       B.RD_One <= 0;
       B.RD_Two <= 0;
@@ -159,6 +161,7 @@ module Datapath #(
       B.MemWrite <= MemWrite;
       B.ALUOp <= ALUOp;
       B.Branch <= Branch;
+      B.Halt <= Halt;
       B.Curr_Pc <= A.Curr_Pc;
       B.RD_One <= Reg1;
       B.RD_Two <= Reg2;
@@ -239,6 +242,7 @@ module Datapath #(
       C.Pc_Imm <= 0;
       C.Pc_Four <= 0;
       C.Imm_Out <= 0;
+      C.Halt <= 0;
       C.Alu_Result <= 0;
       C.RD_Two <= 0;
       C.rd <= 0;
@@ -252,6 +256,7 @@ module Datapath #(
       C.Pc_Imm <= BrImm;
       C.Pc_Four <= Old_PC_Four;
       C.Imm_Out <= B.ImmG;
+      C.Halt <= Halt;
       C.Alu_Result <= ALUResult;
       C.RD_Two <= FBmux_Result;
       C.rd <= B.rd;
@@ -287,6 +292,7 @@ module Datapath #(
       D.Pc_Imm <= 0;
       D.Pc_Four <= 0;
       D.Imm_Out <= 0;
+      D.Halt <= 0;
       D.Alu_Result <= 0;
       D.MemReadData <= 0;
       D.rd <= 0;
@@ -296,6 +302,7 @@ module Datapath #(
       D.Pc_Imm <= C.Pc_Imm;
       D.Pc_Four <= C.Pc_Four;
       D.Imm_Out <= C.Imm_Out;
+      D.Halt <= Halt;
       D.Alu_Result <= C.Alu_Result;
       D.MemReadData <= ReadData;
       D.rd <= C.rd;
