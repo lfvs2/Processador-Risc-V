@@ -1,68 +1,57 @@
 `timescale 1ns / 1ps
 
 module ALUController (
-    //Inputs
-    input logic [1:0] ALUOp,  // 2-bit opcode field from the Controller--00: LW/SW/AUIPC; 01:Branch; 10: Rtype/Itype; 11:JAL/LUI
-    input logic [6:0] Funct7,  // bits 25 to 31 of the instruction
-    input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
-
-    //Output
-    output logic [3:0] Operation  // operation selection for ALU
+    input logic [1:0] ALUOp,     // 00: LW/SW/AUIPC, 01: Branches, 10: R-type/I-type
+    input logic [6:0] Funct7,    // bits 25-31
+    input logic [2:0] Funct3,    // bits 12-14
+    output logic [3:0] Operation // ALU operation code
 );
-    //Mudei pra facilitar e deixar mais bonitinho
+
+// this organization clearify more the code, splitting by ALUOp
   always_comb begin
-        Operation = 4'b0000;
-
-        casez ({ALUOp, Funct7, Funct3})
-            // ADD e ADDI Funct3 = 000, Funct7 = 0000000 para ADD R-type; Funct7 é ? para ADDI
-            // (ALUOp=10, Funct3=000)
-            {2'b10, 7'b0000000, 3'b000}: Operation = 4'b0010; // ADD (R-type)
-            {2'b11, 7'b???????, 3'b000}: Operation = 4'b0010; // ADDI (I-type, Funct7 não importa)
-
-            // SUB (Funct3 = 000, Funct7 = 0100000)
-            {2'b10, 7'b0100000, 3'b000}: Operation = 4'b0001; // SUB (R-type)
-
-            // AND
-            {2'b10, 7'b0000000, 3'b111}: Operation = 4'b0000; // AND (R-type)
-
-            // OR 
-            {2'b10, 7'b0000000, 3'b110}: Operation = 4'b0111; // OR (R-type)
-
-            // XOR
-            {2'b10, 7'b0000000, 3'b100}: Operation = 4'b0110; // XOR (R-type)
-
-            // SLT / SLTI (Funct3 = 010, Funct7 = 0000000 para SLT R-type; Funct7 é '?' para SLTI)
-            {2'b10, 7'b0000000, 3'b010}: Operation = 4'b1000; // SLT (R-type)
-            {2'b11, 7'b???????, 3'b010}: Operation = 4'b1000; // SLTI (I-type)
-
-            // SLLI 
-            {2'b11, 7'b???????, 3'b001}: Operation = 4'b0011; // SLLI (I-type)
-
-            // SRL / SRLI (Funct3 = 101, Funct7 = 0000000)
-            {2'b11, 7'b0000000, 3'b101}: Operation = 4'b0100; // SRLI
-
-            // SRA / SRAI (Funct3 = 101, Funct7 = 0100000)
-            {2'b11, 7'b0100000, 3'b101}: Operation = 4'b0101; // SRA / SRAI
-
-            // LW / SW / AUIPC (ALUOp == 2'b00)
-            {2'b00, 7'b???????, 3'b???}: Operation = 4'b0010; // ADD
-
-            // Branch (ALUOp == 2'b01)
-            {2'b01, 7'b???????, 3'b000}: Operation = 4'b1001; // BEQ (comparação)
-
-	    // Branch (ALUOp == 2'b01)
-            {2'b01, 7'b???????, 3'b001}: Operation = 4'b1010; // BNE (comparação)
-
-            // Branch (ALUOp == 2'b01)
-            {2'b01, 7'b???????, 3'b100}: Operation = 4'b1011; // BLT (comparação)
-
-	    // Branch (ALUOp == 2'b01)
-            {2'b01, 7'b???????, 3'b101}: Operation = 4'b1100; // BGE (comparação)
-            
-            // JAL / LUI (ALUOp == 2'b11)
-            {2'b11, 7'b???????, 3'b???}: Operation = 4'b0010; // ADD (para JAL e outras operações que possam usar a ALU)
-
-            default: Operation = 4'b0000; // Operaçao de AND, ou outra operação "segura"
+    case (ALUOp)
+      2'b00: begin 
+        Operation = 4'b0010; // LW, SW, AUIPC — uses ADD
+      end
+      
+      2'b01: begin // Branches
+        case (Funct3)
+          3'b000: Operation = 4'b1000; // BEQ
+          3'b001: Operation = 4'b1001; // BNE
+          3'b100: Operation = 4'b1100; // BLT
+          3'b101: Operation = 4'b1101; // BGE
+          default: Operation = 4'b0000;
         endcase
-    end
+      end
+      
+      2'b10: begin // R-type and I-type (como ADD, SUB, ADDI, SLTI, etc.)
+        case (Funct3)
+          3'b000: begin
+            if (Funct7 == 7'b0100000)
+              Operation = 4'b0001; // SUB
+            else
+              Operation = 4'b0010; // ADD / ADDI
+          end
+		
+          3'b001: Operation = 4'b0011; // SLL / SLLI
+          3'b010: Operation = 4'b1000; // SLT / SLTI
+          3'b100: Operation = 4'b0110; // XOR / XORI
+          3'b101: begin
+            if (Funct7 == 7'b0100000)
+              Operation = 4'b0101; // SRA / SRAI
+            else
+              Operation = 4'b0100; // SRL / SRLI
+          end
+          3'b110: Operation = 4'b0111; // OR / ORI
+          3'b111: Operation = 4'b0000; // AND / ANDI
+          default: Operation = 4'b0000;
+        endcase
+      end
+
+      default: begin // default for secure the process, in case of don't recognizes any other ALUOp.
+        Operation = 4'b0000;
+      end
+    endcase
+  end
+
 endmodule
