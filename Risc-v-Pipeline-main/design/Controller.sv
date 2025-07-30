@@ -27,7 +27,7 @@ module Controller (
   assign LW = 7'b0000011;  //lw
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
-  assign HLT = 7'b1111111  //halt
+  assign HLT = 7'b1111111; //halt
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
   assign MemtoReg = (Opcode == LW);
@@ -37,5 +37,5 @@ module Controller (
   assign ALUOp[0] = (Opcode == BR || Opcode == I_TYPE);
   assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE);
   assign Branch = (Opcode == BR);
-  assign Halt = (Opcode == HLT)
+    assign Halt = (Opcode == HLT);
 endmodule
