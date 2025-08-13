@@ -25,7 +25,7 @@ Seu objetivo é implementar as instruções restantes listadas abaixo:
 
 | # | Instrução | Implementada | Testada | Funcionando |
 |---|-----------|:-----------:|:-------:|:-----------:|
-| 1  | `JAL`     |      ❌     |    ❌    |      ❌      |
+| 1  | `JAL`     |      ✅     |    ✅    |      ❌      |
 | 2  | `JALR`    |      ❌     |    ❌    |      ❌      |
 | 3  | `BNE`     |      ✅     |    ✅    |      ✅      |
 | 4  | `BLT`     |      ✅     |    ✅    |      ✅      |
