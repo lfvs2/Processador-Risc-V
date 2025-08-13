@@ -15,7 +15,7 @@ module alu#(
         always_comb begin
         case (Operation)
                 4'b0000: ALUResult = SrcA & SrcB;                           // AND
-                4'b0001: ALUResult = SrcA - SrcB;                           // SUB, BEQ
+                4'b0001: ALUResult = SrcA - SrcB;                           // SUB
                 4'b0010: ALUResult = SrcA + SrcB;                           // ADD, ADDI, LW, SW
                 4'b0011: ALUResult = SrcA << SrcB[4:0];                     // SLL, SLLI
                 4'b0100: ALUResult = SrcA >> SrcB[4:0];                     // SRL, SRLI
